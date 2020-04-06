@@ -1,29 +1,4 @@
-const obj = { 
-    "name": 1, 
-    "items": [
-        { 
-            "name": 2, 
-            "items": [
-                { "name": 3 }, 
-                { "name": 4 }
-            ] 
-        }, 
-        { 
-            "name": 5, 
-            "items": [
-                {
-                    "name": 6,
-                    "items": [
-                        { "name": 7 },
-                        { "name": 8 },
-                    ]
-                }
-            ]
-        }
-    ]
-}
-
-function printTree(tree) {
+module.exports = function printTree(tree) {
     function printNode(node, index, items, level, prevIndex) {
         let indent = ''
         let prefix = ''
@@ -55,8 +30,3 @@ function printTree(tree) {
 
     printNode(tree, 1, null, 1, String(0))
 }
-
-
-printTree(obj)
-
-module.exports = printTree
