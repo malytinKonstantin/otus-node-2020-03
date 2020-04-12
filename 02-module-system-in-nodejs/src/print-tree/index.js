@@ -27,9 +27,9 @@ function printNode(tree, node, index, items, level, prevIndex) {
 
     console.log('\n', prefix + indent + postfix + node.name)
 
-    if ('childrens' in node && node.childrens !== null) {
-        node.childrens.forEach((item, index, array) => {
-            printNode(tree, item, index, array, level + 1, prevIndex + '-' + index, )
+    if (node.children) {
+        node.children.forEach((item, index, array) => {
+            printNode(tree, item, index, array, level + 1, prevIndex + '-' + index)
         })
     }
 }

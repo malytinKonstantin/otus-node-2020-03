@@ -18,7 +18,7 @@ async function getFiles(dir) {
             name: dirent.name,
         }
         if (dirent.isDirectory()) {
-            children.childrens = null
+            children.children = null
         }
         response.push(children)
     }

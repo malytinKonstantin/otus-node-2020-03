@@ -1,14 +1,14 @@
 const getFiles = require('./getFiles')
 
 async function buildTreeNode({ level, dirname, parentNode, depth }) {
-    const childrens = await getFiles(dirname)
+    const children = await getFiles(dirname)
     const nextLevel = level + 1
-    parentNode.childrens = childrens
+    parentNode.children = children
 
     if (nextLevel <= depth) {
-        for (const childrenNode of childrens) {
-            // массив childrens может быть только директории типа папка
-            if ('childrens' in childrenNode) {
+        for (const childrenNode of children) {
+            // массив children может быть только директории типа папка
+            if ('children' in childrenNode) {
                 await buildTreeNode({ 
                     level: nextLevel,
                     dirname: childrenNode.path,
@@ -25,7 +25,7 @@ async function getDirTree(dirname, depth) {
     const level = 1
 
     for (const childrenNode of firsLevelNode) {
-        if ('childrens' in childrenNode) {
+        if ('children' in childrenNode) {
             await buildTreeNode({ 
                 level, 
                 dirname: childrenNode.path, 
