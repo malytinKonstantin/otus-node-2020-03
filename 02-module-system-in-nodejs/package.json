@@ -4,12 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src ~/Downloads/projects/otus-node-2020-03 -d 3"
+    "start": "node src ~/Downloads/projects/otus-node-2020-03 -d 3",
+    "test": "jest",
+    "test:coverage": "jest --collectCoverage"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "yargs": "^15.3.1"
+  },
+  "dependencies": {
+    "jest": "^26.0.1",
+    "mock-fs": "^4.12.0"
   }
 }
