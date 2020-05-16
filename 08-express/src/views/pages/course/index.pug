@@ -1,4 +1,13 @@
 extends ../../layout 
 
 block content
-  h1 course page
+  h1 course: #{course.title}
+  p #{course._id}
+  p #{course.description}
+
+  ul
+    each lesson in course.lessons
+      li
+        a(href=`/lesson/${lesson._id}`) #{lesson.title}
+        br
+        p #{lesson.description}
