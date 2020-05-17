@@ -3,7 +3,7 @@ const CourseService = require('../../services/course.service')
 const LessonService = require('../../services/lesson.service')
 const router = express.Router()
 
-router.get('/course', async (req, res, next) => {
+router.get('/courses', async (req, res, next) => {
     const courses = await CourseService.getAll()
     res.render('pages/courses', { courses })
 })
