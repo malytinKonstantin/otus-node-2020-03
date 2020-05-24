@@ -13,7 +13,7 @@ const personApiRouter = require('./routes/api/person')
 const courseViewRouter = require('./routes/pages/course')
 const lessonViewRouter = require('./routes/pages/lesson')
 const homeViewRouter = require('./routes/pages/home')
-
+const authViewRouter = require('./routes/pages/auth')
 const app = express()
 
 // view engine setup
@@ -43,6 +43,7 @@ app.use(personApiRouter)
 app.use(homeViewRouter)
 app.use(courseViewRouter)
 app.use(lessonViewRouter)
+app.use(authViewRouter)
 
 
 // catch 404 and forward to error handler
