@@ -5,6 +5,9 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const logger = require('morgan')
+const helmet = require('helmet')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
 
 const courseApiRouter = require('./routes/api/course')
 const lessonApiRouter = require('./routes/api/lesson')
@@ -23,6 +26,7 @@ app.set('view engine', 'pug')
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(helmet())
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -35,6 +39,61 @@ mongoose.connect(uri, {
 }).catch(err => {
   console.log(err)
 })
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log('---- ---- ----')
+    console.log({ username, password })
+    console.log('---- ---- ----')
+
+    done(null, { username, password })
+
+    return 
+    // User.findOne({ username }, function(err, user) {
+    //   if (err) { return done(err); }
+    //   if (!user) {
+    //     return done(null, false, { message: 'Incorrect username.' });
+    //   }
+    //   if (!user.validPassword(password)) {
+    //     return done(null, false, { message: 'Incorrect password.' });
+    //   }
+    //   return done(null, user)
+    // })
+  }
+))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.serializeUser(function(user, done) {
+  done(null, user)
+})
+
+passport.deserializeUser(function(user, done) {
+  done(null, user)
+})
+
+app.post('/auth',
+  passport.authenticate(
+    'local',
+    {
+      successRedirect: '/',
+      failureRedirect: '/auth',
+      failureFlash: true,
+    }
+  )
+)
+
+app.get('/', function checkAuthentication(req, res, next) {
+  console.log('--- some path ---')
+  console.log('isAuthenticated', req.isAuthenticated())
+  if (req.isAuthenticated()) {
+    next()
+  } else {
+    // res.redirect('/auth')
+  }
+})
+
 
 app.use(courseApiRouter)
 app.use(lessonApiRouter)

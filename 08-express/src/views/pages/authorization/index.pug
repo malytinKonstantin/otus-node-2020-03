@@ -1,4 +1,14 @@
-extends ../../layout 
+extends ../../layout
 
 block content
   h1 auth page
+
+  form(action='/auth' method='post')
+    div
+      label username
+      input(type='text' name='username')
+    div
+      label password
+      input(type='password' name='password')
+    div
+      input(type='submit' value='log in')
