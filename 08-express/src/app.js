@@ -34,9 +34,7 @@ app.use(bodyParser.json())
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-const uri = 'mongodb://localhost/my-courses-db'
-
-mongoose.connect(uri, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).catch(err => {
@@ -80,7 +78,7 @@ app.use((err, req, res, next) => {
   res.render('error')
 })
 
-app.listen(3000, () => {
+app.listen(process.env.APP_PORT, () => {
   console.log(`Server started on 3000`)
 })
 
