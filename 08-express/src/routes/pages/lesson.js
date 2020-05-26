@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.get('/lesson/:id', async (req, res, next) => {
     const lesson = await LessonService.findOne(req.params.id)
-    res.render('pages/lesson', { lesson })
+    res.render('pages/lesson', { lesson, isAuth: req.isAuthenticated() })
 })
 
 module.exports = router
