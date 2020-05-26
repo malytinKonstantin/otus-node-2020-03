@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    nav.main-nav
+      ul
+        li
+          a(href="/") главная
+        li
+          a(href="/courses") курсы
+        li
+          a(href="/auth") авторизация
+
+    block content
