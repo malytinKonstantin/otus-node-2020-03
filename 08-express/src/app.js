@@ -7,11 +7,12 @@ const bodyParser = require('body-parser')
 const logger = require('morgan')
 const helmet = require('helmet')
 const passport = require('passport')
+const session = require('express-session')
 const LocalStrategy = require('passport-local').Strategy
 
 const courseApiRouter = require('./routes/api/course')
 const lessonApiRouter = require('./routes/api/lesson')
-const personApiRouter = require('./routes/api/person')
+const userApiRouter = require('./routes/api/user')
 
 const courseViewRouter = require('./routes/pages/course')
 const lessonViewRouter = require('./routes/pages/lesson')
@@ -30,6 +31,8 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(passport.initialize())
+app.use(passport.session())
 
 const uri = 'mongodb://localhost/my-courses-db'
 
@@ -40,15 +43,12 @@ mongoose.connect(uri, {
   console.log(err)
 })
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    console.log('---- ---- ----')
-    console.log({ username, password })
-    console.log('---- ---- ----')
+passport.serializeUser((user, done) => done(null, user))
+passport.deserializeUser((user, done) => done(null, user))
 
-    done(null, { username, password })
-
-    return 
+passport.use(new LocalStrategy(function(username, password, done) {
+  done(null, { username, password })
+  return 
     // User.findOne({ username }, function(err, user) {
     //   if (err) { return done(err); }
     //   if (!user) {
@@ -59,19 +59,16 @@ passport.use(new LocalStrategy(
     //   }
     //   return done(null, user)
     // })
-  }
-))
+}))
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(courseApiRouter)
+app.use(lessonApiRouter)
+app.use(userApiRouter)
 
-passport.serializeUser(function(user, done) {
-  done(null, user)
-})
-
-passport.deserializeUser(function(user, done) {
-  done(null, user)
-})
+app.use(homeViewRouter(app))
+app.use(courseViewRouter)
+app.use(lessonViewRouter)
+app.use(authViewRouter)
 
 app.post('/auth',
   passport.authenticate(
@@ -83,27 +80,6 @@ app.post('/auth',
     }
   )
 )
-
-app.get('/', function checkAuthentication(req, res, next) {
-  console.log('--- some path ---')
-  console.log('isAuthenticated', req.isAuthenticated())
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    // res.redirect('/auth')
-  }
-})
-
-
-app.use(courseApiRouter)
-app.use(lessonApiRouter)
-app.use(personApiRouter)
-
-app.use(homeViewRouter)
-app.use(courseViewRouter)
-app.use(lessonViewRouter)
-app.use(authViewRouter)
-
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
