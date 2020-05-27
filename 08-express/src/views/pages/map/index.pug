@@ -1,0 +1,14 @@
+extends ../../layout 
+
+block content
+  h1 map page
+  br
+  h4 для старта отрисовки маршрута нажмите кнопку: start route
+  br
+  button(onclick="startSendMessage()") start route
+  button(onclick="stopSendMessage()") close ws conection
+
+  br
+  br
+  br
+  div#map(style='width: 1000px; height: 500px;')
