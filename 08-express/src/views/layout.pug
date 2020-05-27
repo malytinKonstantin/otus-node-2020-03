@@ -7,10 +7,15 @@ html
     nav.main-nav
       ul
         li
-          a(href="/") главная
+          a(href='/') главная
         li
-          a(href="/courses") курсы
-        li
-          a(href="/auth") авторизация
+          a(href='/courses') курсы
+        if !isAuth
+          li
+            a(href='/auth') авторизация
+        else
+          li
+            form(action='/api/auth/logout' method='POST')
+              button(type='submit') выйти
 
     block content

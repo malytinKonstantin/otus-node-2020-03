@@ -2,3 +2,16 @@ extends ../../layout
 
 block content
   h1 auth page
+
+  form(action='/api/auth/register_login' method='POST')
+    div
+      label(for='email') email
+      br
+      input(type='email' name='email' id='email' value='test@mail.ru')
+
+    div
+      label(for='password') password
+      br
+      input(type='password' name='password' id='password' value='123123')
+    
+    button(type='submit') submit form

@@ -5,12 +5,12 @@ const router = express.Router()
 
 router.get('/courses', async (req, res, next) => {
     const courses = await CourseService.getAll()
-    res.render('pages/courses', { courses })
+    res.render('pages/courses', { courses, isAuth: req.isAuthenticated() })
 })
 
 router.get('/course/:id', async (req, res, next) => {
     const course = await CourseService.findOne(req.params.id)
-    res.render('pages/course', { course })
+    res.render('pages/course', { course, isAuth: req.isAuthenticated() })
 })
 
 module.exports = router

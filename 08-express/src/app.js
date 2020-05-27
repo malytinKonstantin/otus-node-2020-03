@@ -6,9 +6,14 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const logger = require('morgan')
 
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const passport = require('./passport/setup')
+const auth = require('./routes/api/auth')
+
 const courseApiRouter = require('./routes/api/course')
 const lessonApiRouter = require('./routes/api/lesson')
-const personApiRouter = require('./routes/api/person')
+const userApiRouter = require('./routes/api/user')
 
 const courseViewRouter = require('./routes/pages/course')
 const lessonViewRouter = require('./routes/pages/lesson')
@@ -21,24 +26,35 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 app.use(logger('dev'))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(bodyParser.json())
+
 app.use(express.static(path.join(__dirname, 'public')))
 
-const uri = 'mongodb://localhost/my-courses-db'
-
-mongoose.connect(uri, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).catch(err => {
   console.log(err)
 })
 
+app.use(session({
+  secret: 'very secret this is',
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use('/api/auth', auth)
 app.use(courseApiRouter)
 app.use(lessonApiRouter)
-app.use(personApiRouter)
+app.use(userApiRouter)
 
 app.use(homeViewRouter)
 app.use(courseViewRouter)
@@ -62,7 +78,7 @@ app.use((err, req, res, next) => {
   res.render('error')
 })
 
-app.listen(3000, () => {
+app.listen(process.env.APP_PORT, () => {
   console.log(`Server started on 3000`)
 })
 
