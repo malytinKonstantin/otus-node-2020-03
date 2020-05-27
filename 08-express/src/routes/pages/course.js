@@ -1,6 +1,5 @@
 const express = require('express')
 const CourseService = require('../../services/course.service')
-const LessonService = require('../../services/lesson.service')
 const router = express.Router()
 
 router.get('/courses', async (req, res, next) => {

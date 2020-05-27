@@ -19,7 +19,10 @@ const courseViewRouter = require('./routes/pages/course')
 const lessonViewRouter = require('./routes/pages/lesson')
 const homeViewRouter = require('./routes/pages/home')
 const authViewRouter = require('./routes/pages/auth')
+const mapViewRouter = require('./routes/pages/map')
 const app = express()
+
+require('./ws/server')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -60,7 +63,7 @@ app.use(homeViewRouter)
 app.use(courseViewRouter)
 app.use(lessonViewRouter)
 app.use(authViewRouter)
-
+app.use(mapViewRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -81,6 +84,5 @@ app.use((err, req, res, next) => {
 app.listen(process.env.APP_PORT, () => {
   console.log(`Server started on 3000`)
 })
-
 
 module.exports = app
